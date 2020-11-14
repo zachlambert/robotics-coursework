@@ -8,8 +8,7 @@ function waypoints = get_leg_waypoints(start_config, goal_config, N, u_max)
     % (T = u_max)
     
     waypoints = zeros(N, 4);
-    u = linspace(0, u_max, N+1);
-    u = u(1:N); % ie: Neglect final waypoint
+    u = linspace(0, u_max, N);
     waypoints(:, 4) = u;
     
     % Copied from get_leg_waypoints_symb
@@ -20,6 +19,6 @@ function waypoints = get_leg_waypoints(start_config, goal_config, N, u_max)
         k1 = 0;
         k2 = -(3*(x0 - xT))/u_max^2;
         k3 = (2*(x0 - xT))/u_max^3;
-        waypoints(:,i) = k3*u^3 + k2*u^2 + k1*u + k0;
+        waypoints(:,i) = k3*u.^3 + k2*u.^2 + k1*u + k0;
     end
 end
