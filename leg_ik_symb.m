@@ -1,18 +1,24 @@
-syms phi theta1 theta2 t phi_dot theta1_dot theta2_dot
+syms theta1 theta2 theta3
 syms l1 l2 l3
-syms vx_base vy_base vphi_base
 syms vx vy
-syms alpha %alpha is the offset angle of each leg alpha=k*pi/3 k=[1:6]
 
-r = l1 + l2*cos(theta1) + l3*cos(theta1 + theta2);
-x = r*cos(phi+alpha);
-y = r*sin(phi+alpha);
-z = -l2*sin(theta1) - l3*sin(theta1 + theta2);
+% Velocity is given as the desired velocity of the leg origin
+% Expressed in the leg frame, with the x-axis pointing
+% radially outward.
+
+% The leg end effector must have an equal velocity
+% in the opposite direction to push the leg origin.
+
+% Inverse kinematics gives joint velocities required
+% for this (opposite) velocity
+
+r = l1 + l2*cos(theta2) + l3*cos(theta2 + theta3);
+x = r*cos(theta1);
+y = r*sin(theta1);
+z = -l2*sin(theta2) - l3*sin(theta2 + theta3);
 
 state = [x; y; z];
-J = [diff(state, phi) diff(state, theta1) diff(state, theta2) ];
-Jinv = inv(J);
+J = [diff(state, theta1) diff(state, theta2) diff(state, theta3) ];
 
-vx = vx_base - r*vphi_base*sin(phi)
-vy = vy_base + r*vphi_base*cos(phi)
-Jinv
+%[theta1_dot; theta2_dot; theta3_dot] = -inv(J)*[vx;vy;0];
+display(-inv(J)*[vx;vy;0]);
