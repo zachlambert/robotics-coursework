@@ -1,7 +1,4 @@
 classdef lidarPlanner
-    %LIDARPLANNER Summary of this class goes here
-    %   Detailed explanation goes here
-    
     properties
         GoalPose,
         SensorOffset,
@@ -29,9 +26,10 @@ classdef lidarPlanner
             obj.Validator.Map = map;
 
             obj.Planner = plannerRRTStar(ss, validator);
-            obj.Planner.MaxIterations=1e6;
-            obj.Planner.MaxNumTreeNodes=1e6;
-            obj.Planner.MaxConnectionDistance = 1;
+            % Only want a short-term plan, so don't do many iterations
+            obj.Planner.MaxIterations=1000;
+            obj.Planner.MaxNumTreeNodes=100;
+            obj.Planner.MaxConnectionDistance = 0.8;
         end
         
         function update(obj, pose, lidar_range)
